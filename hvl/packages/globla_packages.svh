@@ -1,4 +1,4 @@
-package global_typs;
+package global_typs_pkg;
 
 // --------------
 // -- UDP --
@@ -53,7 +53,7 @@ package global_typs;
 	} udp_addr_type;
 
 // --------------
-// -- AXI TX --
+// -- AXI --
 // --------------
 	typedef struct {
 		bit           data_out_valid;
@@ -112,4 +112,4 @@ package global_typs;
 	}ipv4_rx_type;
 
 
-endpackage : global_typs
+endpackage : global_typs_pkg

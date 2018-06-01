@@ -1,21 +1,8 @@
-import global_typs_pkg::*;
+import ahb_apb_bridge_pkg::*;
 
-class udp_transaction extends uvm_sequence_item;
-	`uvm_object_utils(udp_transaction)
-
-////// Signals ///////////////
-
-
-	function new(string name= "");
-		super.new(name);
-	endfunction
-
-endclass: udp_transaction
-/*	
-
-
-	udp_txi.hdr.dst_ip_addr
-
+class ahb_master_transaction extends uvm_sequence_item;
+	`uvm_object_utils(ahb_master_transaction)
+	
 	logic HSEL;
 	rand trans_type_t HTRANS[];
 	rand logic [HADDR_SIZE-1:0]HADDR[];
@@ -182,4 +169,9 @@ endclass: udp_transaction
 			}
 		}
 	}
-*/	
+	
+	function new(string name= "");
+		super.new(name);
+	endfunction
+
+endclass: ahb_master_transaction
