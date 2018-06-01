@@ -78,7 +78,7 @@ architecture Behavioral of UDP_RX is
   signal set_src_ip       : std_logic;
   signal set_data_last    : std_logic;
 
--- IP datagram header format
+-- UDP datagram header format
 --
 --      0          4          8                      16      19             24                    31
 --      --------------------------------------------------------------------------------------------
