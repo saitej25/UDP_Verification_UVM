@@ -1,5 +1,5 @@
-class udp_idle_seq extends uvm_sequence #(udp_transaction);
-	`uvm_object_utils(udp_idle_seq)
+class udp_seq extends uvm_sequence #(udp_transaction);
+	`uvm_object_utils(udp_seq)
 	
 	function new(string name= "");
 		super.new(name);
@@ -9,14 +9,13 @@ class udp_idle_seq extends uvm_sequence #(udp_transaction);
 		udp_transaction txn;
 		txn= udp_transaction::type_id::create("txn");
 		start_item(txn);
-		
-///////////// Enter code here ////////////
 
-		//assert(txn.randomize() with {data_pattern == ZEROS; HTRANS[0] == IDLE;});
+		assert(txn.randomize());
 		finish_item(txn);
 	endtask
 endclass
 
+/*
 class udp_simple_seq extends uvm_sequence #(udp_transaction);
 	`uvm_object_utils(udp_simple_seq)
 	
@@ -54,4 +53,7 @@ class udp_complex_seq extends uvm_sequence #(udp_transaction);
 		//assert(txn.randomize() with {HBURST inside{INCR4, INCR8, INCR16};});
 		finish_item(txn);
 	endtask
+
+
 endclass
+*/

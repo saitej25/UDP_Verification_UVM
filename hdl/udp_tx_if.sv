@@ -30,10 +30,16 @@ import global_typs_pkg::*;
 		udp_txi.data.data_out = data;
 		udp_txi.data.data_out_valid = 1;
 		udp_txi.data.data_out_last = last;
+		if(last==1'b1)
+		begin
+			@(posedge clk);
+			clear_valid();
+			udp_txi.data.data_out_last=1'b0;
+		end
 	endtask : send_data
 
 	task clear_valid();
 	udp_txi.data.data_out_valid = 0;
-	endtask : clear_fields
+	endtask : clear_valid
 
 endinterface

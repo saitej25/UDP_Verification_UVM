@@ -11,19 +11,24 @@ class udp_transaction extends uvm_sequence_item;
 	endfunction
 
 
-	rand bit [15:0] dst_port,src_port,data_length;
+	//rand bit [15:0] dst_port,src_port,data_length;
+
+	rand udp_tx_header_type tx_hdr;
+
 
 	rand patterns pattern;
 
 	rand bit [7:0] data [*];
 
-	constraint data_ln{data_length dist {0:=1; [1:1471]:=25; 1472:=2; [1473:2343]:=1};}
+	bit tx_data_last;
 
-		constraint dst_prt{dst_port dist {0:=0; [1:2**12]:=37; [(2**12)+1:2**15]:=1};}
+	constraint data_ln{tx_hdr.data_length dist {0:=1; [1:1471]:=25; 1472:=2; [1473:2343]:=1};}
 
-			constraint src_prt{src_port dist {0:=0; [1:2**12]:=37; [(2**12)+1:2**15]:=1};}
+		constraint dst_prt{tx_hdr.dst_port dist {0:=0; [1:2**12]:=37; [(2**12)+1:2**15]:=1};}
 
-				constraint packet_length {data.size = data_length;}
+			constraint src_prt{tx_hdr.src_port dist {0:=0; [1:2**12]:=37; [(2**12)+1:2**15]:=1};}
+
+				constraint packet_length {data.size = tx_hdr.data_length;}
 
 				constraint data_c {
 					if(pattern == ZERO)

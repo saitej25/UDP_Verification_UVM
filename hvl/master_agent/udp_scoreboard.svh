@@ -23,4 +23,5 @@ class udp_scoreboard extends uvm_scoreboard;
   virtual task run_phase(uvm_phase phase);
     --- comparision logic ---   
   endtask : run_phase
-endclass : mem_scoreboard
+
+endclass : udp_scoreboard

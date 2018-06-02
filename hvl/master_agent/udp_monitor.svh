@@ -6,7 +6,7 @@ class udp_monitor extends uvm_monitor;
 	
 	//Declare config class which has the virtual interface and optional other
 	//dut info
-	udp_config iface_config;
+	virtual udp_tx_if iface_config;
 	
 	//Declare virtual interface
 	virtual udp_if vif;
