@@ -1,47 +1,56 @@
-class udp_base_test extends uvm_test;
+class udp_test extends uvm_test;
 	
-	`uvm_component_utils(uvm_base_test)
+	`uvm_component_utils(udp_test)
 	
-	uvm_env env;
-	uvm_config iface_config;
+	udp_env env;
+	udp_transaction txn;
+	//uvm_config iface_config;
 	
 	function new(string name, uvm_component parent);
 		super.new(name, parent);
 	endfunction
 	
 	function void build_phase(uvm_phase phase);
-		iface_config= new();
+		super.build_phase(phase);
+		//iface_config= new();
 		
 		//Get udp virtual interface 
-		assert(uvm_config_db #(virtual udp_if)::get(this, "", "udp_iface", iface_config.udp_vif))
+		/*assert(uvm_config_db #(virtual udp_if)::get(this, "", "udp_iface", iface_config.udp_vif))
 		else begin 
 			`uvm_fatal(get_full_name(), "Cannot get vif from uvm_config_db");
 		end
-		
+		*/
 		/*assert(uvm_config_db #(virtual apb_if)::get(this, "", "apb_iface", iface_config.apb_vif))
 		else begin 
 			`uvm_fatal(get_full_name(), "Cannot get vif from uvm_config_db");
 		end
 		*/
 		//
-		Send vif to driver and monitor
-		uvm_config_db #(udp_config)::set(this, "*", "iface_config", iface_config);
+		//Send vif to driver and monitor
+		//uvm_config_db #(udp_config)::set(this, "*", "iface_config", iface_config);
 		
+		txn= udp_transaction::type_id::create("txn", this);
 		env= udp_env::type_id::create("env", this);
 		
 	endfunction
 	
-	//Default sequencer. If you need to change the sequencer override this function
+	task run_phase(uvm_phase phase);
+		phase.raise_objection(this);
+		txn.start(env.udp_agent_h.sequencer_h);
+		phase.drop_objection(this);
+	endtask : run_phase
+	/*Default sequencer. If you need to change the sequencer override this function
 	//in child tests
 	function void default_seqr(udp_vseq_base vseq);
 		vseq.a_sequencer= env.udp_agent_h.sequencer_h;
 		//vseq.b_sequencer= env.slave_agent_h.sequencer_h;
 	endfunction
-	
-endclass
+	*/
+
+endclass: udp_test
 
 
-class ahb_apb_incr_test extends ahb_apb_base_test;
+/*class ahb_apb_incr_test extends ahb_apb_base_test;
 
 	`uvm_component_utils(ahb_apb_incr_test)
 	

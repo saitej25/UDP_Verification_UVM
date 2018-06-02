@@ -6,11 +6,11 @@ class udp_monitor extends uvm_monitor;
 	
 	//Declare config class which has the virtual interface and optional other
 	//dut info
-	virtual udp_tx_if iface_config;
+	//virtual udp_tx_if tx_vif;
 	
 	//Declare virtual interface
-	virtual udp_if vif;
-	
+	virtual udp_tx_if tx_vif;
+
 	extern function new(string name, uvm_component parent);
 	extern function void build_phase(uvm_phase phase);
 	extern task run_phase(uvm_phase phase);
@@ -26,9 +26,9 @@ function void udp_monitor::build_phase(uvm_phase phase);
 	super.build_phase(phase);
 	
 	//Get virtual interface from parent
-	assert(uvm_config_db #(udp_config)::get(this, "", "iface_config", iface_config));
+	assert(uvm_config_db #(virtual udp_tx_if)::get(this, "", "tx_vif", tx_vif));
 	
-	vif= iface_config.udp_vif;
+	//vif= iface_config.udp_vif;
 endfunction
 
 task udp_monitor::run_phase(uvm_phase phase);
@@ -41,11 +41,11 @@ task udp_monitor::run_phase(uvm_phase phase);
 	txn.HADDR= new[1];
 	txn.HWDATA= new[1];
 	*/
-	forever begin
+	//forever begin
 //// Enter Code here /////		
 		//vif.udp_monitor(txn.HTRANS[1], txn.HBURST, txn.HSIZE, txn.HWRITE, txn.HADDR[1], txn.HWDATA[1], txn.HRDATA);
 		
 		//Send txn to subscribers
-		monitor_ap.write(txn);
-	end
+	//	monitor_ap.write(txn);
+	//end
 endtask
