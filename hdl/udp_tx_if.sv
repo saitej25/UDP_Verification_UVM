@@ -7,15 +7,14 @@ import global_typs_pkg::*;
 
 	//UDP Layer signals
 	logic udp_tx_start		   ;
-	logic udp_tx_type  udp_txi ;
-	logic udp_tx_result        ;
+	udp_tx_type  udp_txi ;
+	logic [1:0] udp_tx_result        ;
 	logic udp_tx_data_out_ready;
 	//IP layer TX signals
 	logic ip_tx_start		  ;
-	logic ipv4_tx_type ip_tx  ;
-	logic ip_tx_result        ;
+	ipv4_tx_type ip_tx  ;
+	logic [1:0] ip_tx_result        ;
 	logic ip_tx_data_out_ready;
-
 
 	task send_hdr(input udp_tx_header_type hdr);
 		wait(ip_tx_data_out_ready)
@@ -43,3 +42,17 @@ import global_typs_pkg::*;
 	endtask : clear_valid
 
 endinterface
+
+
+interface udp_rx_if (input logic clk,
+		input logic reset);
+
+	logic udp_rx_start;
+	udp_rx_type udp_rxo;
+
+	logic ip_rx_start;
+	ipv4_rx_type ip_rx;
+
+endinterface
+
+	
