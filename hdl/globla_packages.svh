@@ -18,15 +18,6 @@ package global_typs_pkg;
 		shortint unsigned checksum   ;
 	} udp_tx_header_type;
 
-
-	typedef struct {
-		int      unsigned dst_ip_addr;
-		shortint unsigned dst_port   ;
-		shortint unsigned src_port   ;
-		shortint unsigned data_length;
-		shortint unsigned checksum   ;
-	} udp_tx_type;
-
 	typedef struct {
 		udp_tx_header_type hdr ;
 		axi_out_type       data;
@@ -111,5 +102,6 @@ package global_typs_pkg;
 		axi_in_type         data;
 	}ipv4_rx_type;
 
+	typedef enum logic [3:0] {ZEROS,ONES,ZEROS_ONES,LONG_ZERO_ONES,RAMP,TRIANGLE,PRBS} patterns;
 
 endpackage : global_typs_pkg
