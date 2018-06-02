@@ -19,12 +19,11 @@ endclass: udp_monitor
 	
 function udp_monitor::new(string name, uvm_component parent);
 	super.new(name, parent);
+	monitor_ap= new("monitor_ap", this);
 endfunction
 
 function void udp_monitor::build_phase(uvm_phase phase);
 	super.build_phase(phase);
-	
-	monitor_ap= new("monitor_ap", this);
 	
 	//Get virtual interface from parent
 	assert(uvm_config_db #(udp_config)::get(this, "", "iface_config", iface_config));

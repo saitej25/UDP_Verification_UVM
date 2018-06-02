@@ -1,4 +1,4 @@
-import global_typs_pkg::*;
+//import ahb_apb_bridge_pkg::*;
 
 class udp_transaction extends uvm_sequence_item;
 	`uvm_object_utils(udp_transaction)
@@ -12,10 +12,6 @@ class udp_transaction extends uvm_sequence_item;
 
 endclass: udp_transaction
 /*	
-
-
-	udp_txi.hdr.dst_ip_addr
-
 	logic HSEL;
 	rand trans_type_t HTRANS[];
 	rand logic [HADDR_SIZE-1:0]HADDR[];
