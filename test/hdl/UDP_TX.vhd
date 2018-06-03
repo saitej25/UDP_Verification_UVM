@@ -117,7 +117,6 @@ udp_txi.data.data_in 	 	<= data_in;
 udp_txi.data.data_in_valid  <= data_in_valid; 
 udp_txi.data.data_in_last  	<= data_in_last;
 
-
 protocol		<= ip_tx.hdr.protocol	;		
 data_length		<= ip_tx.hdr.data_length	;
 dst_ip_addr 	<= ip_tx.hdr.dst_ip_addr ;
