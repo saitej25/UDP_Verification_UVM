@@ -20,7 +20,7 @@ package global_typs_pkg;
 
 	typedef struct {
 		udp_tx_header_type hdr ;
-		axi_out_type       data;
+		axi_in_type       data;
 	} udp_tx_type;
 
 //---------------------UDP RX-------------------//
@@ -35,7 +35,7 @@ package global_typs_pkg;
 
 	typedef struct{
 		udp_rx_header_type hdr ;
-		axi_in_type        data;
+		axi_out_type        data;
 	}udp_rx_type;
 
 	typedef struct {

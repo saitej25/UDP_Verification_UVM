@@ -18,11 +18,34 @@ module testbench_top();
 		#5 reset = 1'b0;
 	end 
 	
-	//// Instantiate the DUT
-	UDP_TX TX_DUT(.clk(clk), .reset(reset), .udp_tx_start(tx_intf.udp_tx_start), .udp_txi(tx_intf.udp_txi), .udp_tx_result(tx_intf.udp_tx_result), .udp_tx_data_out_ready(tx_intf.udp_tx_data_out_ready), .ip_tx_start(tx_intf.ip_tx_start), .ip_tx(tx_intf.ip_tx), .ip_tx_result(tx_intf.ip_tx_result), .ip_tx_data_out_ready(tx_intf.ip_tx_data_out_ready));
-
 	//// Instantiate the interface
 	udp_tx_if tx_intf(clk,reset);
+
+	//// Instantiate the DUT
+	UDP_TX TX_DUT(
+			.udp_tx_start			(tx_intf.udp_tx_start),
+			.dst_ip_addr 			(tx_intf.udp_txi.hdr.dst_ip_addr),
+			.dst_port	 			(tx_intf.udp_txi.hdr.dst_port	 ),
+			.src_port	 			(tx_intf.udp_txi.hdr.src_port	 ),
+			.data_length			(tx_intf.udp_txi.hdr.data_length),	
+			.checksum				(tx_intf.udp_txi.hdr.checksum	),
+			.data_in 				(tx_intf.udp_txi.data.data_in_valid	),
+			.data_in_valid 			(tx_intf.udp_txi.data.data_in_last 	),
+			.data_in_last 			(tx_intf.udp_txi.data.udp_tx_result	),
+			.udp_tx_result			(tx_intf.udp_tx_result),
+			.udp_tx_data_out_ready	(tx_intf.udp_tx_data_out_ready),
+			.clk 					(clk),
+			.reset 					(reset),
+			.ip_tx_start			(tx_intf.ip_tx.hdr.ip_tx_start),	
+			.protocol				(tx_intf.ip_tx.hdr.protocol	),
+			.data_length			(tx_intf.ip_tx.hdr.data_length),	
+			.dst_ip_addr 			(tx_intf.ip_tx.hdr.dst_ip_addr ),
+			.data_out_valid			(tx_intf.ip_tx.data.data_out_valid),
+			.data_out_last			(tx_intf.ip_tx.data.data_out_last),
+			.data_out				(tx_intf.ip_tx.data.data_out),
+			.ip_tx_result			(tx_intf.ip_tx_result),
+			.ip_tx_data_out_ready	(tx_intf.ip_tx_data_out_ready)
+			); 
 
 	initial begin
 		uvm_config_db #(virtual udp_tx_if)::set(null, "*", "tx_vif", tx_intf);
