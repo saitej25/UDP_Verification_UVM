@@ -9,12 +9,12 @@ import global_typs_pkg::*;
 	//UDP Layer signals
 	logic udp_tx_start		   ;
 	udp_tx_type  udp_txi ;
-	logic udp_tx_result        ;
+	logic [1:0]udp_tx_result        ;
 	logic udp_tx_data_out_ready;
 	//IP layer TX signals
 	logic ip_tx_start		  ;
 	ipv4_tx_type ip_tx  ;
-	logic ip_tx_result        ;
+	logic [1:0]ip_tx_result        ;
 	logic ip_tx_data_out_ready;
 
 

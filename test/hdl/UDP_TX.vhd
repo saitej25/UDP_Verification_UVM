@@ -49,7 +49,7 @@ entity UDP_TX is
 			o_dst_ip_addr 			: out STD_LOGIC_VECTOR (31 downto 0);
 			o_data_out_valid		: out std_logic;								-- indicates data out is valid
 			o_data_out_last			: out std_logic;								-- with data out valid indicates the last byte of a frame
-			data_out				: out std_logic_vector (7 downto 0);
+			o_data_out				: out std_logic_vector (7 downto 0);
 			ip_tx_result			: in std_logic_vector (1 downto 0);		-- tx status (changes during transmission)
 			ip_tx_data_out_ready	: in std_logic									-- indicates IP TX is ready to take data
 			);
@@ -113,9 +113,9 @@ udp_txi.hdr.dst_port		<= i_dst_port	;
 udp_txi.hdr.src_port		<= i_src_port	; 
 udp_txi.hdr.data_length		<= i_data_length;
 udp_txi.hdr.checksum		<= i_checksum	;
-udp_txi.data.data_in 	 	<= i_data_in;	
-udp_txi.data.data_in_valid  <= i_data_in_valid; 
-udp_txi.data.data_in_last  	<= i_data_in_last;
+udp_txi.data.data_out 	 	<= i_data_in;	
+udp_txi.data.data_out_valid <= i_data_in_valid; 
+udp_txi.data.data_out_last  <= i_data_in_last;
 
 o_protocol		<= ip_tx.hdr.protocol	;		
 o_data_length		<= ip_tx.hdr.data_length	;
