@@ -29,30 +29,29 @@ entity UDP_RX is
   port (
     -- UDP Layer signals
     udp_rx_start    : out std_logic;       -- indicates receipt of udp header
-    is_valid        : out std_logic;
-    src_ip_addr     : out STD_LOGIC_VECTOR (31 downto 0);
-    src_port        : out STD_LOGIC_VECTOR (15 downto 0);
-    dst_port        : out STD_LOGIC_VECTOR (15 downto 0);
-    data_length     : out STD_LOGIC_VECTOR (15 downto 0); -- user data size, bytes
-    data_out_valid  : out std_logic;            
-    data_out_last   : out std_logic;            
-    data_out        : out std_logic_vector (7 downto 0);
+    o_is_valid        : out std_logic;
+    o_src_ip_addr     : out STD_LOGIC_VECTOR (31 downto 0);
+    o_src_port        : out STD_LOGIC_VECTOR (15 downto 0);
+    o_dst_port        : out STD_LOGIC_VECTOR (15 downto 0);
+    o_data_length     : out STD_LOGIC_VECTOR (15 downto 0); -- user data size, bytes
+    o_data_out_valid  : out std_logic;            
+    o_data_out_last   : out std_logic;            
+    o_data_out        : out std_logic_vector (7 downto 0);
     -- system sioutgnals
     clk             : in  std_logic;
     reset           : in  std_logic;
     -- IP layer RX signals
-    ip_rx_start     : in  std_logic;       -- indicates receipt of ip header
-    is_valid        : in std_logic;
-    protocol        : in std_logic_vector (7 downto 0);
-    data_length     : in STD_LOGIC_VECTOR (15 downto 0); -- user data size, bytes
-    src_ip_addr     : in STD_LOGIC_VECTOR (31 downto 0);
-    num_frame_errors: in std_logic_vector (7 downto 0);
-    last_error_code : in std_logic_vector (3 downto 0);    -- see RX_EC_xxx constants
-    is_broadcast    : in std_logic;
-
-    data_in         : in STD_LOGIC_VECTOR (7 downto 0);
-    data_in_valid   : in STD_LOGIC;                -- indicates data_in valid on clock
-    data_in_last    : in STD_LOGIC
+    ip_rx_start       : in  std_logic;       -- indicates receipt of ip header
+    i_is_valid        : in std_logic;
+    i_protocol        : in std_logic_vector (7 downto 0);
+    i_data_length     : in STD_LOGIC_VECTOR (15 downto 0); -- user data size, bytes
+    i_src_ip_addr     : in STD_LOGIC_VECTOR (31 downto 0);
+    i_num_frame_errors: in std_logic_vector (7 downto 0);
+    i_last_error_code : in std_logic_vector (3 downto 0);    -- see RX_EC_xxx constants
+    i_is_broadcast    : in std_logic;
+    i_data_in         : in STD_LOGIC_VECTOR (7 downto 0);
+    i_data_in_valid   : in STD_LOGIC;                -- indicates data_in valid on clock
+    i_data_in_last    : in STD_LOGIC
     );     
 
 end UDP_RX;
@@ -118,24 +117,27 @@ architecture Behavioral of UDP_RX is
 
 begin
 
-    is_valid       <= udp_rxo.hdr.is_valid    ;
-    src_ip_addr    <= udp_rxo.hdr.data_length ;
-    src_port       <= udp_rxo.hdr.src_port    ;
-    dst_port       <= udp_rxo.hdr.dst_port    ;
-    data_length    <= udp_rxo.hdr.src_ip_addr ;
-    data_in        <= udp_rxo.data.data_in       ;
-    data_in_valid  <= udp_rxo.data.data_in_valid ;
-    data_in_last   <= udp_rxo.data.data_in_last  ;
+    o_is_valid       <= udp_rxo.hdr.is_valid    ;
+    o_src_ip_addr    <= udp_rxo.hdr.data_length ;
+    o_src_port       <= udp_rxo.hdr.src_port    ;
+    o_dst_port       <= udp_rxo.hdr.dst_port    ;
+    o_data_length    <= udp_rxo.hdr.src_ip_addr ;
+    o_data_out        <= udp_rxo.data.data_in       ;
+    o_data_out_valid  <= udp_rxo.data.data_in_valid ;
+    o_data_out_last   <= udp_rxo.data.data_in_last  ;
 
 
-    ip_rx.hdr.is_valid              <= is_valid        ;
-    ip_rx.hdr.protocol              <= protocol        ;
-    ip_rx.hdr.data_length           <= data_length     ;
-    ip_rx.hdr.src_ip_addr           <= src_ip_addr     ;
-    ip_rx.hdr.num_frame_errors      <= num_frame_errors;
-    ip_rx.hdr.last_error_code       <= last_error_code ;
-    ip_rx.hdr.is_broadcast          <= is_broadcast    ;
-
+    ip_rx.hdr.is_valid              <= i_is_valid        ;
+    ip_rx.hdr.protocol              <= i_protocol        ;
+    ip_rx.hdr.data_length           <= i_data_length     ;
+    ip_rx.hdr.src_ip_addr           <= i_src_ip_addr     ;
+    ip_rx.hdr.num_frame_errors      <= i_num_frame_errors;
+    ip_rx.hdr.last_error_code       <= i_last_error_code ;
+    ip_rx.hdr.is_broadcast          <= i_is_broadcast    ;
+    ip_rx.data.data_in              <= i_data_in       ;
+    ip_rx.data.data_in_valid        <= i_data_in_valid ;
+    ip_rx.data.data_in_last         <= i_data_in_last  ;
+    
 
   -----------------------------------------------------------------------
   -- combinatorial process to implement FSM and determine control signals
