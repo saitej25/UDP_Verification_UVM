@@ -29,15 +29,27 @@ entity UDP_TX is
     Port (
 			-- UDP Layer signals
 			udp_tx_start			: in std_logic;							-- indicates req to tx UDP
-			udp_txi					: in udp_tx_type;							-- UDP tx cxns
+			dst_ip_addr 			: in STD_LOGIC_VECTOR (31 downto 0);
+			dst_port	 			: in STD_LOGIC_VECTOR (15 downto 0);
+			src_port	 			: in STD_LOGIC_VECTOR (15 downto 0);
+			data_length				: in STD_LOGIC_VECTOR (15 downto 0);	-- user data size, bytes
+			checksum				: in STD_LOGIC_VECTOR (15 downto 0);
+			data_in 				: in STD_LOGIC_VECTOR (7 downto 0);
+			data_in_valid 			: in STD_LOGIC;								-- indicates data_in valid on clock
+			data_in_last 			: in STD_LOGIC;
 			udp_tx_result			: out std_logic_vector (1 downto 0);-- tx status (changes during transmission)
-			udp_tx_data_out_ready: out std_logic;							-- indicates udp_tx is ready to take data
+			udp_tx_data_out_ready	: out std_logic;							-- indicates udp_tx is ready to take data
 			-- system signals
 			clk 						: in  STD_LOGIC;							-- same clock used to clock mac data and ip data
 			reset 					: in  STD_LOGIC;
 			-- IP layer TX signals
 			ip_tx_start				: out std_logic;
-			ip_tx						: out ipv4_tx_type;							-- IP tx cxns
+			protocol				: out std_logic_vector (7 downto 0);
+			data_length				: out STD_LOGIC_VECTOR (15 downto 0);		-- user data size, bytes
+			dst_ip_addr 			: out STD_LOGIC_VECTOR (31 downto 0);
+			data_out_valid			: out std_logic;								-- indicates data out is valid
+			data_out_last			: out std_logic;								-- with data out valid indicates the last byte of a frame
+			data_out				: out std_logic_vector (7 downto 0);
 			ip_tx_result			: in std_logic_vector (1 downto 0);		-- tx status (changes during transmission)
 			ip_tx_data_out_ready	: in std_logic									-- indicates IP TX is ready to take data
 			);
@@ -51,6 +63,9 @@ architecture Behavioral of UDP_TX is
 	type set_clr_type is (SET, CLR, HOLD);
 
 	-- TX state variables
+
+	signal udp_txi			: udp_tx_type;							-- UDP tx cxns
+	signal ip_tx			: ipv4_tx_type;	
 	signal udp_tx_state		: tx_state_type;
 	signal tx_count 			: unsigned (15 downto 0);
 	signal tx_result_reg		: std_logic_vector (1 downto 0);
@@ -91,6 +106,25 @@ architecture Behavioral of UDP_TX is
 --	--------------------------------------------------------------------------------------------
 		
 begin
+
+
+udp_txi.hdr.dst_ip_addr <= dst_ip_addr;
+udp_txi.hdr.dst_port	<= dst_port	; 
+udp_txi.hdr.src_port	<= src_port	; 
+udp_txi.hdr.data_length	<= data_length;
+udp_txi.hdr.checksum	<= checksum	;
+udp_txi.data.data_in 	 	<= data_in;	
+udp_txi.data.data_in_valid  <= data_in_valid; 
+udp_txi.data.data_in_last  	<= data_in_last;
+
+
+protocol		<= ip_tx.hdr.protocol	;		
+data_length		<= ip_tx.hdr.data_length	;
+dst_ip_addr 	<= ip_tx.hdr.dst_ip_addr ;
+data_out_valid	<= ip_tx.data.data_out_valid;
+data_out_last	<= ip_tx.data.data_out_last;
+data_out		<= ip_tx.data.data_out		;
+
 	-----------------------------------------------------------------------
 	-- combinatorial process to implement FSM and determine control signals
 	-----------------------------------------------------------------------

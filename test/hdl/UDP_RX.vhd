@@ -28,15 +28,33 @@ use work.ipv4_types.all;
 entity UDP_RX is
   port (
     -- UDP Layer signals
-    udp_rx_start : out std_logic;       -- indicates receipt of udp header
-    udp_rxo      : out udp_rx_type;
-    -- system signals
-    clk          : in  std_logic;
-    reset        : in  std_logic;
+    udp_rx_start    : out std_logic;       -- indicates receipt of udp header
+    is_valid        : out std_logic;
+    src_ip_addr     : out STD_LOGIC_VECTOR (31 downto 0);
+    src_port        : out STD_LOGIC_VECTOR (15 downto 0);
+    dst_port        : out STD_LOGIC_VECTOR (15 downto 0);
+    data_length     : out STD_LOGIC_VECTOR (15 downto 0); -- user data size, bytes
+    data_out_valid  : out std_logic;            
+    data_out_last   : out std_logic;            
+    data_out        : out std_logic_vector (7 downto 0);
+    -- system sioutgnals
+    clk             : in  std_logic;
+    reset           : in  std_logic;
     -- IP layer RX signals
-    ip_rx_start  : in  std_logic;       -- indicates receipt of ip header
-    ip_rx        : in  ipv4_rx_type
-    );                  
+    ip_rx_start     : in  std_logic;       -- indicates receipt of ip header
+    is_valid        : in std_logic;
+    protocol        : in std_logic_vector (7 downto 0);
+    data_length     : in STD_LOGIC_VECTOR (15 downto 0); -- user data size, bytes
+    src_ip_addr     : in STD_LOGIC_VECTOR (31 downto 0);
+    num_frame_errors: in std_logic_vector (7 downto 0);
+    last_error_code : in std_logic_vector (3 downto 0);    -- see RX_EC_xxx constants
+    is_broadcast    : in std_logic;
+
+    data_in         : in STD_LOGIC_VECTOR (7 downto 0);
+    data_in_valid   : in STD_LOGIC;                -- indicates data_in valid on clock
+    data_in_last    : in STD_LOGIC
+    );     
+
 end UDP_RX;
 
 architecture Behavioral of UDP_RX is
@@ -48,6 +66,8 @@ architecture Behavioral of UDP_RX is
   type settable_count_mode_type is (RST, INCR, SET_VAL, HOLD);
   type set_clr_type is (SET, CLR, HOLD);
 
+  signal udp_rxo          :udp_rx_type;
+  signal ip_rx            :ipv4_rx_type;
 
   -- state variables
   signal rx_state         : rx_state_type;
@@ -97,6 +117,25 @@ architecture Behavioral of UDP_RX is
 
 
 begin
+
+    is_valid       <= udp_rxo.hdr.is_valid    ;
+    src_ip_addr    <= udp_rxo.hdr.data_length ;
+    src_port       <= udp_rxo.hdr.src_port    ;
+    dst_port       <= udp_rxo.hdr.dst_port    ;
+    data_length    <= udp_rxo.hdr.src_ip_addr ;
+    data_in        <= udp_rxo.data.data_in       ;
+    data_in_valid  <= udp_rxo.data.data_in_valid ;
+    data_in_last   <= udp_rxo.data.data_in_last  ;
+
+
+    ip_rx.hdr.is_valid              <= is_valid        ;
+    ip_rx.hdr.protocol              <= protocol        ;
+    ip_rx.hdr.data_length           <= data_length     ;
+    ip_rx.hdr.src_ip_addr           <= src_ip_addr     ;
+    ip_rx.hdr.num_frame_errors      <= num_frame_errors;
+    ip_rx.hdr.last_error_code       <= last_error_code ;
+    ip_rx.hdr.is_broadcast          <= is_broadcast    ;
+
 
   -----------------------------------------------------------------------
   -- combinatorial process to implement FSM and determine control signals
