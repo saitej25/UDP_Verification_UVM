@@ -1,5 +1,5 @@
 class udp_driver extends uvm_driver #(udp_transaction);
-	`uvm_component_utils(udp_driver);
+	`uvm_component_utils(udp_driver)
 	
 	//Declare config class which has the virtual interface and optional other
 	//dut info
@@ -32,23 +32,34 @@ endfunction: build_phase
 
 task udp_driver::run_phase(uvm_phase phase);
 	udp_transaction txn;
-	
-	forever begin
+	repeat(20) begin
+	//forever begin
+		tx_vif.udp_tx_data_out_ready=1;
 		seq_item_port.get_next_item(txn);
-		drive(txn);
-
-		/*foreach(txn.HADDR[i]) begin
-		//Call task from interface
-		//$display("ahb_master_driver: txn.HBURST= %0d, txn.HADDR= %0h", txn.HBURST, txn.HADDR[i]);
-		vif.ahb_master_driver(txn.HTRANS[i], txn.HBURST, txn.HSIZE, txn.HWRITE, txn.HADDR[i], txn.HWDATA[i]);
+		//drive();
+		tx_vif.send_hdr(txn.tx_hdr); 
+		$display("data_length=%0d",txn.tx_hdr.data_length);
+		for (int i=0;i<txn.tx_hdr.data_length;i++)
+		begin
+			if(i<txn.tx_hdr.data_length-1)
+				begin
+					txn.tx_data_last=1'b0;
+					tx_vif.send_data(txn.data[i], txn.tx_data_last); // Add arguments
+				end
+			else
+				begin
+							//$display("yes11");
+					txn.tx_data_last=1'b1;
+					tx_vif.send_data(txn.data[i], txn.tx_data_last);
+				end
 		end
-		*/
 		seq_item_port.item_done();
+		$display("yes9");
 		end
 		endtask: run_phase
 
 //Drive task
-task drive(udp_transaction txn);
+/*task drive();
 	virtual udp_tx_if tx_vif;
 	tx_vif.send_hdr(txn.tx_hdr);  // Add arguments
 	for (int i=0;i<txn.tx_hdr.data_length;i++)
@@ -64,4 +75,4 @@ task drive(udp_transaction txn);
 					tx_vif.send_data(txn.data[i], txn.tx_data_last);
 				end
 		end
-endtask : drive
+endtask : drive */

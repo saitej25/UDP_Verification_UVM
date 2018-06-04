@@ -19,18 +19,21 @@ import global_typs_pkg::*;
 
 
 	task send_hdr(input udp_tx_header_type hdr);
-		wait(ip_tx_data_out_ready)
+		wait(udp_tx_data_out_ready);
+		//$display("yes6");
 		udp_tx_start = 1;
 		udp_txi.hdr = hdr;
 		@(posedge clk);
 		udp_tx_start = 0;
-		repeat(9)@(posedge clk);
+		repeat(9) @(posedge clk);
 	endtask : send_hdr
 
 	task send_data(input byte unsigned data ,input last);
+		@(posedge clk);
 		udp_txi.data.data_out = data;
 		udp_txi.data.data_out_valid = 1;
 		udp_txi.data.data_out_last = last;
+
 		if(last==1'b1)
 		begin
 			@(posedge clk);

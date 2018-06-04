@@ -1,5 +1,5 @@
-`ifndef udp_uvm_include_pkg
-`define udp_uvm_include_pkg
+//`ifndef udp_uvm_include_pkg
+//`define udp_uvm_include_pkg
 
 package udp_uvm_include_pkg;
 	import uvm_pkg::*;
@@ -19,4 +19,4 @@ endpackage
 
 //import udp_uvm_include_pkg::*;
 
-`endif
+//`endif

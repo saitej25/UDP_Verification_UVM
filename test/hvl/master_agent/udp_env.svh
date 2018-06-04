@@ -1,5 +1,5 @@
 class udp_env extends uvm_env;
-	`uvm_component_utils(udp_env);
+	`uvm_component_utils(udp_env)
 	
 	udp_agent udp_agent_h;
 	udp_scoreboard udp_scoreboard_h;

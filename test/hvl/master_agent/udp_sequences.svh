@@ -5,13 +5,18 @@ class udp_seq extends uvm_sequence #(udp_transaction);
 		super.new(name);
 	endfunction
 	
-	task body();
+	virtual task body();
 		udp_transaction txn;
 		txn= udp_transaction::type_id::create("txn");
+		//wait_for_grant();
 		start_item(txn);
-
-		assert(txn.randomize());
+		$display("yes1");
+		void'(txn.randomize());
+		$display("yes2");
 		finish_item(txn);
+		$display("yes3");
+		//send_request(req);
+		//wait_for_item_done();
 	endtask
 endclass
 

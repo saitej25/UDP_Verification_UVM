@@ -1,7 +1,7 @@
 class udp_scoreboard extends uvm_scoreboard;
  
   `uvm_component_utils(udp_scoreboard)
-  uvm_analysis_imp #(udp_driver, udp_scoreboard) item_collected_export;
+  uvm_analysis_imp #(udp_transaction, udp_scoreboard) item_collected_export;
  
   // new - constructor
   function new (string name, uvm_component parent);
@@ -14,9 +14,9 @@ class udp_scoreboard extends uvm_scoreboard;
   endfunction: build_phase
    
   // write
-  virtual function void write(udp_driver pkt);
+  virtual function void write(udp_transaction pkt);
     $display("SCB:: Pkt recived");
-    pkt.print();
+    //pkt.print();
   endfunction : write
  
   // run phase

@@ -27,11 +27,11 @@ package global_typs_pkg;
 	localparam UDPTX_RESULT_SENT    = 3;
 
 	typedef struct {
-		int      unsigned dst_ip_addr;
-		shortint unsigned dst_port   ;
-		shortint unsigned src_port   ;
-		shortint unsigned data_length;
-		shortint unsigned checksum   ;
+		rand int      unsigned dst_ip_addr;
+		rand shortint unsigned dst_port   ;
+		rand shortint unsigned src_port   ;
+		rand shortint unsigned data_length;
+		rand shortint unsigned checksum   ;
 	} udp_tx_header_type;
 
 	typedef struct {

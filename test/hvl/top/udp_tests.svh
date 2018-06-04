@@ -6,7 +6,7 @@ class udp_test extends uvm_test;
 	udp_seq seq;
 	//uvm_config iface_config;
 	
-	function new(string name, uvm_component parent);
+	function new(string name="udp_test", uvm_component parent=null);
 		super.new(name, parent);
 	endfunction
 	
@@ -35,9 +35,10 @@ class udp_test extends uvm_test;
 	endfunction
 	
 	task run_phase(uvm_phase phase);
-		udp_transaction txn;
 		phase.raise_objection(this);
+		$display("yes");
 		seq.start(env.udp_agent_h.sequencer_h);
+		$display("yes_final");
 		phase.drop_objection(this);
 	endtask : run_phase
 	

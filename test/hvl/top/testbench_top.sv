@@ -1,7 +1,6 @@
 `include "uvm_macros.svh"
-`include "udp_uvm_include_pkg.sv"
-
 import uvm_pkg::*;
+import udp_uvm_include_pkg::*;
 
 module testbench_top();
 	
@@ -10,7 +9,7 @@ module testbench_top();
 
 	initial begin
 		clk=1'b0;
-		#5 forever clk=1'b1;
+		forever #5 clk=~clk;
 	end 
 
 	initial begin
@@ -48,9 +47,9 @@ module testbench_top();
 			); 
 
 	initial begin
-		uvm_config_db #(virtual udp_tx_if)::set(null, "*", "tx_vif", tx_intf);
+		uvm_config_db #(virtual udp_tx_if)::set(uvm_root::get(), "*", "tx_vif", tx_intf);
 		//uvm_config_db #(virtual apb_if)::set(null, "uvm_test_top", "apb_iface", hdl_top.apb_iface);
 		
-		run_test();
+		run_test("udp_test");
 	end
 endmodule
