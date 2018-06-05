@@ -28,7 +28,7 @@ use work.ipv4_types.all;
 entity UDP_RX is
   port (
     -- UDP Layer signals
-    udp_rx_start    : out std_logic;       -- indicates receipt of udp header
+    udp_rx_start      : out std_logic;       -- indicates receipt of udp header
     o_is_valid        : out std_logic;
     o_src_ip_addr     : out STD_LOGIC_VECTOR (31 downto 0);
     o_src_port        : out STD_LOGIC_VECTOR (15 downto 0);
@@ -118,10 +118,10 @@ architecture Behavioral of UDP_RX is
 begin
 
     o_is_valid       <= udp_rxo.hdr.is_valid    ;
-    o_src_ip_addr    <= udp_rxo.hdr.data_length ;
+    o_src_ip_addr    <= udp_rxo.hdr.src_ip_addr ;
     o_src_port       <= udp_rxo.hdr.src_port    ;
     o_dst_port       <= udp_rxo.hdr.dst_port    ;
-    o_data_length    <= udp_rxo.hdr.src_ip_addr ;
+    o_data_length    <= udp_rxo.hdr.data_length ;
     o_data_out        <= udp_rxo.data.data_in       ;
     o_data_out_valid  <= udp_rxo.data.data_in_valid ;
     o_data_out_last   <= udp_rxo.data.data_in_last  ;
