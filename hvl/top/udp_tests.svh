@@ -3,10 +3,10 @@ class udp_test extends uvm_test;
 	`uvm_component_utils(udp_test)
 	
 	udp_env env;
-	udp_transaction txn;
+	udp_seq seq;
 	//uvm_config iface_config;
 	
-	function new(string name, uvm_component parent);
+	function new(string name="udp_test", uvm_component parent=null);
 		super.new(name, parent);
 	endfunction
 	
@@ -15,11 +15,10 @@ class udp_test extends uvm_test;
 		//iface_config= new();
 		
 		//Get udp virtual interface 
-		/*assert(uvm_config_db #(virtual udp_if)::get(this, "", "udp_iface", iface_config.udp_vif))
+		/*assert(uvm_config_db #(virtual udp_tx_if)::get(this, "", "tx_vif", tx_vif));
 		else begin 
 			`uvm_fatal(get_full_name(), "Cannot get vif from uvm_config_db");
 		end
-		*/
 		/*assert(uvm_config_db #(virtual apb_if)::get(this, "", "apb_iface", iface_config.apb_vif))
 		else begin 
 			`uvm_fatal(get_full_name(), "Cannot get vif from uvm_config_db");
@@ -29,16 +28,20 @@ class udp_test extends uvm_test;
 		//Send vif to driver and monitor
 		//uvm_config_db #(udp_config)::set(this, "*", "iface_config", iface_config);
 		
-		txn= udp_transaction::type_id::create("txn", this);
+		//txn= udp_transaction::type_id::create("txn");
 		env= udp_env::type_id::create("env", this);
-		
+		seq= udp_seq::type_id::create("seq");
+
 	endfunction
 	
 	task run_phase(uvm_phase phase);
 		phase.raise_objection(this);
-		txn.start(env.udp_agent_h.sequencer_h);
+		$display("yes");
+		seq.start(env.udp_agent_h.sequencer_h);
+		$display("yes_final");
 		phase.drop_objection(this);
 	endtask : run_phase
+	
 	/*Default sequencer. If you need to change the sequencer override this function
 	//in child tests
 	function void default_seqr(udp_vseq_base vseq);
@@ -96,3 +99,4 @@ class ahb_apb_wrap_test extends ahb_apb_base_test;
 	endtask
 
 endclass
+*/

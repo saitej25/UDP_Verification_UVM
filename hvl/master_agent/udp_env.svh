@@ -24,9 +24,7 @@ function void udp_env::build_phase(uvm_phase phase);
 	
 endfunction: build_phase
 
-function void connect_phase(uvm_phase phase);
+function void udp_env::connect_phase(uvm_phase phase);
     udp_agent_h.monitor_h.monitor_ap.connect(udp_scoreboard_h.item_collected_export);
     //mem_agnt.monitor.item_collected_port.connect(mem_scb.item_collected_export);
 endfunction : connect_phase
-
-endclass
