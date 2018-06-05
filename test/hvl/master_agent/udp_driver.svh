@@ -55,7 +55,6 @@ task udp_driver::run_phase(uvm_phase phase);
 				end
 		end
 		seq_item_port.item_done();
-		$display("yes9");
 		end
 		endtask: run_phase
 

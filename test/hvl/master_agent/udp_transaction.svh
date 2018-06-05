@@ -21,7 +21,7 @@ class udp_transaction extends uvm_sequence_item;
 
 	rand udp_tx_header_type tx_hdr;
 	rand patterns pattern;
-	rand bit [7:0] data [2500];
+	rand bit [7:0] data [2500] ;
 	bit tx_data_last;
 
 	/*`uvm_object_utils_begin(udp_transaction)
@@ -73,17 +73,17 @@ class udp_transaction extends uvm_sequence_item;
 
 		else if(pattern==RAMP)
 		foreach(data[i]) {
-			data[i] == data [i] + 1;
+			data[i] == i%256;
 			}
 
 		else if(pattern==TRIANGLE) {
 			foreach(data[i]) {
-				if(i<=tx_hdr.data_length/2) {
+				if(i%256<128) {
 					//data[i]=new[tx_hdr.data_length];
-					data[i] == i; }
+					data[i] == i%256; }
 				else {
 					//data[i]=new[tx_hdr.data_length];
-					data[i] == tx_hdr.data_length - i;
+					data[i] == 8'd255 - i%256;
 				}
 			} }
 
