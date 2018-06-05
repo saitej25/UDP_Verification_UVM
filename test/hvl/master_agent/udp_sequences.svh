@@ -6,17 +6,15 @@ class udp_seq extends uvm_sequence #(udp_transaction);
 	endfunction
 	
 	virtual task body();
+		repeat(30) begin
 		udp_transaction txn;
 		txn= udp_transaction::type_id::create("txn");
-		//wait_for_grant();
 		start_item(txn);
-		$display("yes1");
-		void'(txn.randomize());
-		$display("yes2");
+		
+		void'(txn.randomize() with {txn.pattern dist {0:=1, 1:=1, 2:=1, 3:=1, 4:=1, 5:=1, 6:=1};} );
+		$display("txn.pattern.name=%s",txn.pattern.name);
 		finish_item(txn);
-		$display("yes3");
-		//send_request(req);
-		//wait_for_item_done();
+	end
 	endtask
 endclass
 

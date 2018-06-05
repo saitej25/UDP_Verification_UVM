@@ -32,9 +32,10 @@ endfunction: build_phase
 
 task udp_driver::run_phase(uvm_phase phase);
 	udp_transaction txn;
-	repeat(20) begin
-	//forever begin
-		tx_vif.udp_tx_data_out_ready=1;
+	tx_vif.reset_sys();
+	//repeat(20) begin
+	forever begin
+		tx_vif.ip_tx_data_out_ready=1;
 		seq_item_port.get_next_item(txn);
 		//drive();
 		tx_vif.send_hdr(txn.tx_hdr); 

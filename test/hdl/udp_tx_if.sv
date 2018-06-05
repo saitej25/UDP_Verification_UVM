@@ -2,10 +2,10 @@
 import global_typs_pkg::*;
 
 	interface udp_tx_if (
-		input logic clk,
-		input logic reset
+		input logic clk
 	);
 
+	bit reset;
 	//UDP Layer signals
 	logic udp_tx_start		   ;
 	udp_tx_type  udp_txi ;
@@ -17,9 +17,15 @@ import global_typs_pkg::*;
 	logic [1:0]ip_tx_result        ;
 	logic ip_tx_data_out_ready;
 
+	
+	
+	task reset_sys ();
+		reset = 1;
+		#100; reset = 0;
+	endtask	
 
 	task send_hdr(input udp_tx_header_type hdr);
-		wait(udp_tx_data_out_ready);
+		wait(1);
 		//$display("yes6");
 		udp_tx_start = 1;
 		udp_txi.hdr = hdr;

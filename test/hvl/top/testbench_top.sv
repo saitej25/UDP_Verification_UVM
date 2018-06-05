@@ -14,11 +14,11 @@ module testbench_top();
 
 	initial begin
 		reset=1'b1;
-		#5 reset = 1'b0;
+		#100 reset = 1'b0;
 	end 
 	
 	//// Instantiate the interface
-	udp_tx_if tx_intf(clk,reset);
+	udp_tx_if tx_intf(clk);
 
 	//// Instantiate the DUT
 	UDP_TX TX_DUT(
@@ -34,7 +34,7 @@ module testbench_top();
 			.udp_tx_result			(tx_intf.udp_tx_result),
 			.udp_tx_data_out_ready	(tx_intf.udp_tx_data_out_ready),
 			.clk 					(clk),
-			.reset 					(reset),
+			.reset 					(tx_intf.reset),
 			.ip_tx_start			(),	
 			.o_protocol				(tx_intf.ip_tx.hdr.protocol	),
 			.o_data_length			(tx_intf.ip_tx.hdr.data_length),	
@@ -49,7 +49,6 @@ module testbench_top();
 	initial begin
 		uvm_config_db #(virtual udp_tx_if)::set(uvm_root::get(), "*", "tx_vif", tx_intf);
 		//uvm_config_db #(virtual apb_if)::set(null, "uvm_test_top", "apb_iface", hdl_top.apb_iface);
-		
 		run_test("udp_test");
 	end
 endmodule

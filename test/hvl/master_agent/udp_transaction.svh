@@ -1,4 +1,5 @@
 import global_typs_pkg::*;
+	 
 
 class udp_transaction extends uvm_sequence_item;
 	`uvm_object_utils(udp_transaction)
@@ -6,7 +7,6 @@ class udp_transaction extends uvm_sequence_item;
 	function new(string name= "udp_transaction");
 		super.new(name);
 	endfunction
-
 
 	//rand bit [15:0] dst_port,src_port,data_length;
 
@@ -49,10 +49,11 @@ class udp_transaction extends uvm_sequence_item;
 	*/
 
 	constraint data_c {
-		if(pattern == ZEROS) {
-			foreach(data[i]) {
+		if(pattern == ZEROS)    { 
+			 foreach(data[i]) {
 				data[i] == 'h00;} }
-
+				
+				
 		else if(pattern == ONES)
 		foreach(data[i]) {
 			// data[i]=new[tx_hdr.data_length];
@@ -72,9 +73,8 @@ class udp_transaction extends uvm_sequence_item;
 
 		else if(pattern==RAMP)
 		foreach(data[i]) {
-			//data[i]=new[tx_hdr.data_length];
-			data[i] == i;}
-
+			data[i] == data [i] + 1;
+			}
 
 		else if(pattern==TRIANGLE) {
 			foreach(data[i]) {
@@ -102,5 +102,14 @@ class udp_transaction extends uvm_sequence_item;
 		} */
 	}
 
+/*function ramp(ref m);
+	m=m+1;
+	return m;
+endfunction : ramp
+*/
 
+/*function void post_randomize();
+	data.sort;
+	endfunction 
+*/
 endclass: udp_transaction
