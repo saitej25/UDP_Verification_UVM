@@ -1,5 +1,5 @@
 import global_typs_pkg::*;
-	 
+
 
 class udp_transaction extends uvm_sequence_item;
 	`uvm_object_utils(udp_transaction)
@@ -11,18 +11,26 @@ class udp_transaction extends uvm_sequence_item;
 	//rand bit [15:0] dst_port,src_port,data_length;
 
 	/*typedef struct {
-		rand int      unsigned dst_ip_addr;
-		rand shortint unsigned dst_port   ;
-		rand shortint unsigned src_port   ;
-		rand shortint unsigned data_length;
-		rand shortint unsigned checksum   ;
+	rand int      unsigned dst_ip_addr;
+	rand shortint unsigned dst_port   ;
+	rand shortint unsigned src_port   ;
+	rand shortint unsigned data_length;
+	rand shortint unsigned checksum   ;
 	} udp_tx_header_type;
 	*/
 
 	rand udp_tx_header_type tx_hdr;
 	rand patterns pattern;
-	rand bit [7:0] data [2500] ;
+	rand bit [2499:0] [7:0] data ;
+	bit [2499:0] [7:0] data_rx ;
 	bit tx_data_last;
+
+	//UDP Layer RX
+	logic             udp_rx_start         ;
+	udp_rx_type       udp_rxi              ;
+	logic       [1:0] udp_rx_result        ;
+	logic             udp_rx_data_out_ready;
+
 
 	/*`uvm_object_utils_begin(udp_transaction)
 	`uvm_field_int(tx_hdr,UVM_ALL_ON)
@@ -49,11 +57,11 @@ class udp_transaction extends uvm_sequence_item;
 	*/
 
 	constraint data_c {
-		if(pattern == ZEROS)    { 
-			 foreach(data[i]) {
+		if(pattern == ZEROS)    {
+			foreach(data[i]) {
 				data[i] == 'h00;} }
-				
-				
+
+
 		else if(pattern == ONES)
 		foreach(data[i]) {
 			// data[i]=new[tx_hdr.data_length];
@@ -74,7 +82,7 @@ class udp_transaction extends uvm_sequence_item;
 		else if(pattern==RAMP)
 		foreach(data[i]) {
 			data[i] == i%256;
-			}
+		}
 
 		else if(pattern==TRIANGLE) {
 			foreach(data[i]) {
@@ -97,19 +105,9 @@ class udp_transaction extends uvm_sequence_item;
 
 		/*else
 		foreach(data[i]) {
-			//data[i]=new[tx_hdr.data_length];
-			data[i] == $urandom();
+		//data[i]=new[tx_hdr.data_length];
+		data[i] == $urandom();
 		} */
 	}
 
-/*function ramp(ref m);
-	m=m+1;
-	return m;
-endfunction : ramp
-*/
-
-/*function void post_randomize();
-	data.sort;
-	endfunction 
-*/
 endclass: udp_transaction

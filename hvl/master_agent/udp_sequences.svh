@@ -6,7 +6,7 @@ class udp_seq extends uvm_sequence #(udp_transaction);
 	endfunction
 	
 	virtual task body();
-		repeat(30) begin
+		repeat(20) begin
 		udp_transaction txn;
 		txn= udp_transaction::type_id::create("txn");
 		start_item(txn);

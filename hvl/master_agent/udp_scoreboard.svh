@@ -14,14 +14,21 @@ class udp_scoreboard extends uvm_scoreboard;
   endfunction: build_phase
    
   // write
-  virtual function void write(udp_transaction pkt);
-    $display("SCB:: Pkt recived");
-    //pkt.print();
+  virtual function void write(udp_transaction txn);
+    //$display(txn.udp_rxi.hdr.src_ip_addr, txn.tx_hdr.dst_ip_addr);
+    //$display("txn.data_rx=%0d , txn.data=%0d", txn.data_rx, txn.data);
+
+    if (txn.udp_rxi.hdr.src_ip_addr==txn.tx_hdr.dst_ip_addr &&  
+      txn.udp_rxi.hdr.src_port==txn.tx_hdr.src_port && 
+      txn.udp_rxi.hdr.dst_port==txn.tx_hdr.dst_port)
+        $display("SCB PASS: Matched");
+    else
+        $display("SCB FAIL: Didnt match");
   endfunction : write
- 
+
   // run phase
-  virtual task run_phase(uvm_phase phase);
-  // comparision logic ---   
-  endtask : run_phase
+  //virtual task run_phase(uvm_phase phase);
+      
+  //endtask : run_phase
 
 endclass : udp_scoreboard

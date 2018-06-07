@@ -1,7 +1,6 @@
-//// Interface file ///////
 import global_typs_pkg::*;
 
-	interface udp_tx_if (input logic clk);
+	interface udp_tx_if (input logic clk); 
 
 	bit reset;
 	//UDP Layer TX signals
@@ -9,7 +8,7 @@ import global_typs_pkg::*;
 	udp_tx_type       udp_txi              ;
 	logic       [1:0] udp_tx_result        ;
 	logic             udp_tx_data_out_ready;
-	//UDP Layer RX 
+	//UDP Layer RX
 	logic             udp_rx_start         ;
 	udp_rx_type       udp_rxi              ;
 	logic       [1:0] udp_rx_result        ;
@@ -36,9 +35,10 @@ import global_typs_pkg::*;
 		repeat(9) @(posedge clk);
 	endtask : send_hdr
 
-	task send_data(input byte unsigned data ,input last);
+	task send_data(input byte unsigned data ,input bit last);
 		@(posedge clk);
 		udp_txi.data.data_out = data;
+		//$display("data_out",udp_txi.data.data_out);
 		udp_txi.data.data_out_valid = 1;
 		udp_txi.data.data_out_last = last;
 
@@ -54,4 +54,43 @@ import global_typs_pkg::*;
 		udp_txi.data.data_out_valid = 0;
 	endtask : clear_valid
 
-endinterface
+	task read_hdr(output udp_rx_header_type hdr);
+		wait(udp_rx_start);
+		hdr = udp_rxi.hdr;
+	endtask : read_hdr
+
+	 task read_rx_data(output byte unsigned data_read);
+		wait(udp_rxi.data.data_in_valid); begin
+		@(negedge clk);
+		if(udp_rxi.data.data_in_valid)
+		data_read=udp_rxi.data.data_in;
+		//$display("data_read",data_read);
+		//last = udp_rxi.data.data_in_last;
+		//$display("data_read : RX: \n",data_read);
+		end
+		endtask
+
+	task read_tx_data(output byte unsigned data_read);
+		wait(udp_txi.data.data_out_valid) begin
+		 @(negedge clk);
+		if(udp_txi.data.data_out_valid)
+		data_read=udp_txi.data.data_out; end
+		//$display("data_read : TX : \n",data_read);
+	endtask : read_tx_data
+	
+
+	// task read_data_all(output byte unsigned data_read, data_tx_read);
+	// 	fork 
+	// 	wait(udp_rxi.data.data_in_valid) begin
+	// 	data_read=udp_rxi.data.data_in; end
+	// 	@(posedge clk);
+
+	// 	wait(udp_txi.data.data_out_valid) begin
+	// 	data_tx_read=udp_txi.data.data_out; end
+	// 	@(posedge clk);
+		
+	// 	//$display("data_read",data_read);
+	// 	//last = udp_rxi.data.data_in_last;
+	// 	join
+	// 	endtask	
+	endinterface

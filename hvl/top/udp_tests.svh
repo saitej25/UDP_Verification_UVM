@@ -36,9 +36,7 @@ class udp_test extends uvm_test;
 	
 	task run_phase(uvm_phase phase);
 		phase.raise_objection(this);
-		$display("yes");
 		seq.start(env.udp_agent_h.sequencer_h);
-		$display("yes_final");
 		phase.drop_objection(this);
 	endtask : run_phase
 	

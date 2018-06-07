@@ -45,7 +45,7 @@ task udp_driver::run_phase(uvm_phase phase);
 			if(i<txn.tx_hdr.data_length-1)
 				begin
 					txn.tx_data_last=1'b0;
-					tx_vif.send_data(txn.data[i], txn.tx_data_last); // Add arguments
+					tx_vif.send_data(txn.data[i], txn.tx_data_last); 
 				end
 			else
 				begin
