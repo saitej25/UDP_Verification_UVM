@@ -1,23 +1,11 @@
 import global_typs_pkg::*;
 
-
 class udp_transaction extends uvm_sequence_item;
 	`uvm_object_utils(udp_transaction)
 	///// Signals ///////////////
 	function new(string name= "udp_transaction");
 		super.new(name);
 	endfunction
-
-	//rand bit [15:0] dst_port,src_port,data_length;
-
-	/*typedef struct {
-	rand int      unsigned dst_ip_addr;
-	rand shortint unsigned dst_port   ;
-	rand shortint unsigned src_port   ;
-	rand shortint unsigned data_length;
-	rand shortint unsigned checksum   ;
-	} udp_tx_header_type;
-	*/
 
 	rand udp_tx_header_type tx_hdr;
 	rand patterns pattern;
@@ -32,29 +20,15 @@ class udp_transaction extends uvm_sequence_item;
 	logic             udp_rx_data_out_ready;
 
 
-	/*`uvm_object_utils_begin(udp_transaction)
-	`uvm_field_int(tx_hdr,UVM_ALL_ON)
-	`uvm_field_int(pattern,UVM_ALL_ON)
-	`uvm_field_int(data,UVM_ALL_ON)
-	`uvm_field_int(tx_data_last,UVM_ALL_ON)
-	`uvm_object_utils_end
-	*/
-
 	constraint data_ln{tx_hdr.data_length dist {0:=1, [1:1471]:=25, 1472:=2, [1473:2343]:=1};}
 
-	constraint dst_prt{tx_hdr.dst_port dist {0:=0, [1:2**12]:=37, [(2**12)+1:2**15]:=1};}
+	constraint dst_prt{tx_hdr.dst_port dist {[1:2**12]:=40, [(2**12)+1:2**15]:=1};}
 
-	constraint src_prt{tx_hdr.src_port dist {0:=0, [1:2**12]:=37, [(2**12)+1:2**15]:=1};}
+	constraint src_prt{tx_hdr.src_port dist {[1:2**12]:=40, [(2**12)+1:2**15]:=1};}
 
+	constraint dst_ip_addr{tx_hdr.dst_ip_addr dist {0:=1, [32'h1:32'hFFFF_FFFE]:=5, '1:=1};}
 	//constraint packet_length {data.size == tx_hdr.data_length;}
 
-	/*function void post_randomize();
-	for(int i = 0; i < data.size()); i++) begin
-	data[i]=new();
-
-	end
-	endfunction
-	*/
 
 	constraint data_c {
 		if(pattern == ZEROS)    {
@@ -103,11 +77,6 @@ class udp_transaction extends uvm_sequence_item;
 			else
 			data[i] == 'hFF; }
 
-		/*else
-		foreach(data[i]) {
-		//data[i]=new[tx_hdr.data_length];
-		data[i] == $urandom();
-		} */
 	}
 
 endclass: udp_transaction

@@ -64,9 +64,6 @@ import global_typs_pkg::*;
 		@(negedge clk);
 		if(udp_rxi.data.data_in_valid)
 		data_read=udp_rxi.data.data_in;
-		//$display("data_read",data_read);
-		//last = udp_rxi.data.data_in_last;
-		//$display("data_read : RX: \n",data_read);
 		end
 		endtask
 
@@ -75,22 +72,6 @@ import global_typs_pkg::*;
 		 @(negedge clk);
 		if(udp_txi.data.data_out_valid)
 		data_read=udp_txi.data.data_out; end
-		//$display("data_read : TX : \n",data_read);
 	endtask : read_tx_data
-	
-
-	// task read_data_all(output byte unsigned data_read, data_tx_read);
-	// 	fork 
-	// 	wait(udp_rxi.data.data_in_valid) begin
-	// 	data_read=udp_rxi.data.data_in; end
-	// 	@(posedge clk);
-
-	// 	wait(udp_txi.data.data_out_valid) begin
-	// 	data_tx_read=udp_txi.data.data_out; end
-	// 	@(posedge clk);
 		
-	// 	//$display("data_read",data_read);
-	// 	//last = udp_rxi.data.data_in_last;
-	// 	join
-	// 	endtask	
 	endinterface

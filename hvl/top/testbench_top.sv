@@ -20,6 +20,9 @@ module testbench_top();
 	//// Instantiate the interface
 	udp_tx_if tx_intf (clk);
 
+	//// Instantiate coverage
+	udp_coverage cov;
+
 	//// Instantiate the DUT
 	UDP_TX TX_DUT (
 		.udp_tx_start         (tx_intf.udp_tx_start               ),
@@ -75,7 +78,16 @@ module testbench_top();
 
 	initial begin
 		uvm_config_db #(virtual udp_tx_if)::set(uvm_root::get(), "*", "tx_vif", tx_intf);
-		//uvm_config_db #(virtual apb_if)::set(null, "uvm_test_top", "apb_iface", hdl_top.apb_iface);
+		end
+
+/////////////// Run Test //////////////////////
+	initial begin	
 		run_test("udp_test");
 	end
+
+/////////////  Execute Coverage  ///////////////////
+	initial begin
+		cov = new(tx_intf);
+		cov.execute();
+	end 
 endmodule

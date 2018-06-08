@@ -105,7 +105,5 @@ package global_typs_pkg;
 	}ipv4_rx_type;
 
 	typedef enum logic [3:0] {TRIANGLE,RAMP,ZEROS,ONES,ZEROS_ONES,LONG_ZERO_ONES,PRBS} patterns;
-	//typedef enum logic [3:0] {TRIANGLE,RAMP,ZEROS_ONES,LONG_ZERO_ONES,PRBS} patterns;
-
 
 endpackage : global_typs_pkg

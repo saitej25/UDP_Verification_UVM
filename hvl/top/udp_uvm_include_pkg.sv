@@ -7,6 +7,7 @@ package udp_uvm_include_pkg;
 	
 	`include "udp_config.svh"
 	`include "../master_agent/udp_transaction.svh"
+	`include "../master_agent/udp_coverage.svh"
 	`include "../master_agent/udp_sequences.svh"
 	`include "../master_agent/udp_sequencer.svh"
 	`include "../master_agent/udp_driver.svh"
